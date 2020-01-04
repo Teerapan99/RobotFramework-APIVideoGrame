@@ -1,9 +1,6 @@
 *** Settings ***
-Library   SeliniumLibrary
 
 *** Keywords ***
-
-
 
 *** Variables ***
 
