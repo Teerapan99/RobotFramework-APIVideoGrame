@@ -39,7 +39,7 @@ TC1:Returns all the videogames(GET)
 
 TC3: Returns the details of a single game by ID(GET)
      create session    mysession   ${bese_url}
-     ${response}=    get request    mysession   ${path}/12
+     ${response}=      get request    mysession   ${path}/6
      Log to console    ${response.status_code}
      Log to console    ${response.content}
 
@@ -47,7 +47,7 @@ TC3: Returns the details of a single game by ID(GET)
      ${status_code}=    Convert To String    ${response.status_code}
      Should Be Equal    ${status_code}    200
      ${res_body}=      Convert To String    ${response.content}
-     Should Contain    ${res_body}    string
+     Should Contain    ${res_body}    Doom
 Tc4:Returns the videogames(PUT)
      create session    mysession   ${bese_url}
      ${data}=    Create Dictionary
@@ -68,3 +68,14 @@ Tc4:Returns the videogames(PUT)
 
      ${res_body}=      Convert To String    ${response.content}
      Should Contain    ${res_body}    Test
+TC5:Delete
+     create session    mysession   ${bese_url}
+     ${response}=      Delete Request    mysession   ${path}/4
+     Log to console    ${response.status_code}
+     Log to console    ${response.content}
+
+     #Validation
+     ${status_code}=    Convert To String    ${response.status_code}
+     Should Be Equal    ${status_code}    200
+     ${res_body}=      Convert To String    ${response.content}
+     Should Contain    ${res_body}    Record Deleted Successfully
