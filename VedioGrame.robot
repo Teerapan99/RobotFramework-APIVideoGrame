@@ -46,3 +46,25 @@ TC3: Returns the details of a single game by ID(GET)
      #Validation
      ${status_code}=    Convert To String    ${response.status_code}
      Should Be Equal    ${status_code}    200
+     ${res_body}=      Convert To String    ${response.content}
+     Should Contain    ${res_body}    string
+Tc4:Returns the videogames(PUT)
+     create session    mysession   ${bese_url}
+     ${data}=    Create Dictionary
+             ...    id=12
+             ...    name=Test
+             ...    releaseDate=2020-01-05T11:56:46.516Z
+             ...    reviewScore=100
+             ...    category=Teerapan
+             ...    rating=Ma
+     ${header}=    Create Dictionary    content-type=application/json
+     ${response}=    put request    mysession   ${path}/12    data=${data}     headers=${header}
+     Log to console    ${response.status_code}
+     Log to console    ${response.content}
+
+     #Validation
+     ${status_code}=    Convert To String    ${response.status_code}
+     Should Be Equal    ${status_code}    200
+
+     ${res_body}=      Convert To String    ${response.content}
+     Should Contain    ${res_body}    Test
