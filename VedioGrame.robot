@@ -25,7 +25,7 @@ TC1:Returns all the videogames(GET)
 #              ...    reviewScore=0
 #              ...    category=string
 #              ...    rating=string
-#      ${header}=    Create Dictionary    content-type=application/json
+#      ${header}=    Create Dictionary    content-type=application/json .   #or application/xml 
 #      ${response}=    post request    mysession   ${path}    data=${data}     headers=${header}
 #      Log to console    ${response.status_code}
 #      Log to console    ${response.content}
