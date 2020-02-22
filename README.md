@@ -1,62 +1,30 @@
-# Learning-Robot-Framework-by-Bryan-Lamb
-Run Script option
+Create Session    xxxx     ${URL_GET}
 
-    1.Command
-    2.batch file
-    3.Task Scheduler
-    4.saucelabs.com (via command )
-    5.Jenkins (remote exec on saucelabs.com)
-    
-Run Command
+     จากบรรทัดนี้คือเรากำหนดให้มันสร้าง session ชื่อ xxxx นะเมื่อมันไปที่ URL_GET
+-------------------------------------------------------------------
+
+${resp}=  PUT Request    xxxx    /todos/1
+
+      จากบรรทัดนี้ เราจะระบุประเภท request ของเราว่าเป็นประเภทไหน จากนั้นตามด้วย session ที่เราสร้างไว้ และที่ที่มันจะไป
+       --------------------------------------------------------------------
+      กรณีที่เราต้องการส่ง request แบบมี data เข้าไปเราต้องสร้าง Dictionary ก่อนนะเวลาที่ ${resp} มันเรียกใช้มันจะได้รู้จักเราก่อน เช่นกรณีที่ PUT กับ       POST
+
+${data}=  Create Dictionary    name=nantRobot    text=Hello world
+
+      บรรทัดนี้เราสร้างให้มันมี Dictionary ชื่อnantRobot และเก็บค่า text=Hello world
       
-     robot -d results folder/my-script.robot ->run แล้วไฟล์ result จะแยกไปอยู่ใน folder results
-     robot -d results --include smoke tests/my-script.robot 
-     robot -d Path/folder -i smoke tests/my-script.robot 
+${headers}=  Create Dictionary    Content-Type=from-data
 
-Run Script .bat file for windows
+     บรรทัดนี้ เราสร้าง Dictionary เพื่อระบุ Content-Type ในการส่งว่าส่งไปด้วย Content-Type ประเภทไหน 
+     ***ตรงนี้สำคัญนะ api เขารับแบบไหนส่งไปให้ตรงนะคะเพราะถ้าส่งไม่ตรงเราอาจจะ error เลย หรือร้ายแรงสุดก็ api ผ่าน แต่ data ที่ส่งไปไม่ถึงอะไรอย่างงี้ ฉะนั้น ดูดีดีีเด้อ***
+     
+${resp}=  PUT Request    NANTAPI    /todos/1    data=${data}    headers=${headers}
 
-     1. Create Taxt file
-     2.add Commands
-       @echo off
-       cd path/folder script
-          call robot -d results tests/my-script.robot 
-          call robot -d results --include smoke tests/my-script.robot 
-          call robot -d Path/folder -i smoke tests/my-script.robot
-       
-       Ex.
-       @echo off
-       cd path/folder script
-       call robot -d results tests/my-script.robot 
-       
-        or Ex. กรณีที่อยากแยก results file and run brower ต่างๆด้วย file .bat
-       @echo off
-       cd path/folder script
-       call robot -d Path/folder(เก็บResults) -v BROWSER:ie or chrome or filefox tests/my-script.robot 
-       
-      3.Save the file
-      4.Change .txt extention to .bat
-      5.Double Click the .bat file to excuete
-for Mac os 
- 
- 
-      1.Open TextEdit and create a new file
-      2.Convert it to plain text by clicking Format > Make Plain Text
-      Add your commands, one per line. For example, you could do:
-            #! /bin/bash
-            cd path/folder script
-            robot -d Path/folder(เก็บResults) -v BROWSER:ie or chrome or filefox tests/my-script.robot 
-      3.Run chmod u+x ~/Desktop/myCommandScript.command in your terminal, where ~/Desktop/myCommandScript.command is the path  to your script. This will give the terminal permission to run the file.
+    บรรทัดนี้ จะเห็นว่าเรานำค่าที่เราประกาศและสร้างไว้ที่ Dictionary มาใช้นะ ซึ่งเวลาที่ robotframework มันทำงานมันก็จะทำตามบรรทัดนี้เลย
+-------------------------------------------------------------------
+Log To Console   ${resp.text}
 
-     4.You're done! Double-click the file to run. Dragging over the terminal icon will also work.
-      
-Run Script Task Schedule
-  
-      Create New Task
-      Point at .bat file
-      Triggering
-         On Demand
-         Scheduled
-Run Multiple suite
+    บรรทัดนี้เป็นคำสั่งให้ robot framework มันปริ้น log ที่ได้รับกลับมาให้เราดูว่าได้อะไรกลับมาจากการ request เข้าไปหา api
+Should Contain  ${resp.text}  ok
 
-    robot -d path(เก็บ results log) path(Test result) ->จะ run ทุกไฟล์ .robt 
-   Ex.->robot -d results tests
+     บรรทัดนี้แน้นทำเพื่อไว้เช็คว่า data ที่ตอบกลับมาที่ได้จาก log ข้างบนนั้นได้ ok หรือเปล่า เพื่อเป็นการเช็คว่าสิ่งที่เราทำสำเร็จแน่นอน ซึ่งสำหรับผู้ที่จะเอาไปใช้นะคะ แน้นแนะนำว่าให้ระบุคำสั่งนี้ไปด้วยนะ เพื่อกันกรณีที่มันทำงานได้ไม่ถูกต้องตรงตามที่เราคาดหวัง ส่วนคำที่จะดักก็แล้วแต่ api ว่าใช้คำว่าอะไรกรณีที่ api ทำงานได้ปกติ
