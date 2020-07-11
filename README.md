@@ -1,3 +1,5 @@
+RUN Gradlew
+     -->gradle bootrun
 Create Session    xxxx     ${URL_GET}
 
      จากบรรทัดนี้คือเรากำหนดให้มันสร้าง session ชื่อ xxxx นะเมื่อมันไปที่ URL_GET
